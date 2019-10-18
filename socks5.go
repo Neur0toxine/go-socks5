@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	socks5Version = uint8(22)
+	socks5Version = uint8(5)
 )
 
 // Config is used to setup and configure a Server
@@ -45,6 +45,9 @@ type Config struct {
 	// Logger can be used to provide a custom log target.
 	// Defaults to stdout.
 	Logger *log.Logger
+
+	// NoVersionCheck is provided to disable version check
+	NoVersionCheck bool
 
 	// Optional function for dialing out
 	Dial func(ctx context.Context, network, addr string) (net.Conn, error)
@@ -130,7 +133,7 @@ func (s *Server) ServeConn(conn net.Conn) error {
 	}
 
 	// Ensure we are compatible
-	if version[0] != socks5Version {
+	if !s.config.NoVersionCheck && version[0] != socks5Version {
 		err := fmt.Errorf("Unsupported SOCKS version: %v", version)
 		s.config.Logger.Printf("[ERR] socks: %v", err)
 		return err
