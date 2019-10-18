@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	socks5Version = uint8(5)
+	socks5Version = uint8(22)
 )
 
 // Config is used to setup and configure a Server
